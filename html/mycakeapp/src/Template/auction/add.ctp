@@ -6,6 +6,10 @@
 		echo $this->Form->hidden('user_id', ['value' => $authuser['id']]);
 		echo '<p><strong>USER: ' . $authuser['username'] . '</strong></p>';
 		echo $this->Form->control('name');
+		echo '商品詳細';
+		echo $this->Form->textarea('detail');
+		echo '画像';
+		echo $this->Form->file('image');
 		echo $this->Form->hidden('finished', ['value' => 0]);
 		echo $this->Form->control('endtime');
 	?>

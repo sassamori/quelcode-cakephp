@@ -88,7 +88,13 @@ class AuctionController extends AuctionBaseController
             // 画像ファイル名称の先頭に時間をつけて/webroot/imgに移動させる
             $file = $this->request->getData('image');
             $filePath = '../webroot/img/'.date("YmdHis").$file['name'];
-            move_uploaded_file($file['tmp_name'],$filePath);
+            try{
+                if(is_uploaded_file($file['tmp_name'])){
+                    move_uploaded_file($file['tmp_name'],$filePath);                    
+                }
+            }catch(Exception $e){
+                echo 'エラー：'.$e->getMessage().PHP_EOL;
+            }
             // biditemにフォームの送信内容を反映
             $biditem = $this->Biditems->patchEntity($biditem,$this->request->getData());
             $biditem['image'] = date("YmdHis").$file['name'];

@@ -85,6 +85,10 @@ class AuctionController extends AuctionBaseController
         $biditem = $this->Biditems->newEntity();
         // POST送信時の処理
         if($this->request->isPost()){
+            // 画像ファイル名称の先頭に時間をつけて/webroot/imgに移動させる
+            $file = $this->request->getData('image');
+            $filePath = '../webroot/img/'.date("YmdHis").$file['name'];
+            move_uploaded_file($file['tmp_name'],$filePath);
             // biditemにフォームの送信内容を反映
             $biditem = $this->Biditems->patchEntity($biditem,$this->request->getData());
             // biditemに保存する

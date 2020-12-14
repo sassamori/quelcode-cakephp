@@ -82,11 +82,6 @@ class BiditemsTable extends Table
             ->add('image', 'fileExtension', [
                 'rule'     => ['extension', ['gif', 'jpeg', 'png', 'jpg']],
                 'message'  => 'ファイル形式は、gif、jpeg、png、jpgのいずれかにしてください。'
-            ])
-            ->add('image', 'fileBelowMaxSize', [
-                'rule'     => ['isBelowMaxSize', 4000],
-                'message'  => 'ファイルサイズは最大 4000byteまでです。',
-                'provider' => 'upload'
             ]);
 
         $validator

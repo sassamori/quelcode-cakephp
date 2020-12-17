@@ -62,6 +62,8 @@ class BiditemsTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
+        $validator->setProvider('upload', \Josegonzalez\Upload\Validation\DefaultValidation::class);
+
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create');
@@ -84,6 +86,17 @@ class BiditemsTable extends Table
                 'message'  => 'ファイル形式は、gif、jpeg、png、jpgのいずれかにしてください。'
             ]);
 
+        $validator
+            ->add('image', 'myRule', [
+                'rule' => function($data, $provider) {
+                    $path = WWW_ROOT.'img/'.$data;
+                    if(file_exists($path) && (filesize($path)<100000)){
+                        return true;
+                    }
+                    return 'ファイルサイズが大きすぎます。';
+                }
+            ]);
+        
         $validator
             ->boolean('finished')
             ->requirePresence('finished', 'create')

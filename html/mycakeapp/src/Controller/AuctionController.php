@@ -86,18 +86,25 @@ class AuctionController extends AuctionBaseController
         // POST送信時の処理
         if($this->request->isPost()){
             // 画像ファイル名称の先頭に時間をつけて/webroot/imgに移動させる
-            $file = $this->request->getData('image');
-            $filePath = '../webroot/img/'.date("YmdHis").$file['name'];
+            $upload_file = $this->request->getData('image');
+            $filePath = '../webroot/img/'.date("YmdHis").$upload_file['name'];
             try{
-                if(is_uploaded_file($file['tmp_name'])){
-                    move_uploaded_file($file['tmp_name'],$filePath);                    
+                if(is_uploaded_file($upload_file['tmp_name'])){
+                    move_uploaded_file($upload_file['tmp_name'],$filePath);                    
                 }
             }catch(Exception $e){
                 echo 'エラー：'.$e->getMessage().PHP_EOL;
             }
             // biditemにフォームの送信内容を反映
-            $biditem = $this->Biditems->patchEntity($biditem,$this->request->getData());
-            $biditem['image'] = date("YmdHis").$file['name'];
+            $data = [
+                'user_id' => $this->request->getData('user_id'),
+                'name' => $this->request->getData('name'),
+                'detail' => $this->request->getData('detail'),
+                'image' => date("YmdHis").$upload_file['name'],
+                'finished' => $this->request->getData('finished'),
+                'endtime' => $this->request->getData('endtime'),
+            ];
+            $biditem = $this->Biditems->newEntity($data); 
             // biditemに保存する
             if($this->Biditems->save($biditem)){
                 // 成功時のメッセージ

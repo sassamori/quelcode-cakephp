@@ -62,8 +62,6 @@ class BiditemsTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
-        $validator->setProvider('upload', \Josegonzalez\Upload\Validation\DefaultValidation::class);
-
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create');

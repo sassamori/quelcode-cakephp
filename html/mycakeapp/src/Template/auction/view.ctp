@@ -13,6 +13,14 @@
 	<td><?= $this->Number->format($biditem->id) ?></td>
 </tr>
 <tr>
+	<th scope="row">商品詳細</th>
+	<td><?= nl2br(h($biditem->detail)) ?></td>
+</tr>
+<tr>
+	<th scope="row">商品画像</th>
+	<td><?php echo $this->Html->image($biditem->image,['width'=>'200','height'=>'200']) ?></td>
+</tr>
+<tr>
 	<th scope="row">終了時間</th>
 	<td><?= h($biditem->endtime) ?></td>
 </tr>

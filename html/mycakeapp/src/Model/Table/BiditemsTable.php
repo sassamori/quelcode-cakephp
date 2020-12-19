@@ -73,6 +73,29 @@ class BiditemsTable extends Table
             ->notEmptyString('name');
 
         $validator
+            ->scalar('detail','商品詳細を入力してください')
+            ->maxLength('detail',255,'255文字以内で入力してください。');
+
+        $validator
+            ->scalar('image','画像を選択してください。')
+            ->maxLength('image',255,'画像名称を255文字以内に収めてください。')
+            ->add('image', 'fileExtension', [
+                'rule'     => ['extension', ['gif', 'jpeg', 'png', 'jpg']],
+                'message'  => 'ファイル形式は、gif、jpeg、png、jpgのいずれかにしてください。'
+            ]);
+
+        $validator
+            ->add('image', 'myRule', [
+                'rule' => function($data, $provider) {
+                    $path = WWW_ROOT.'img/'.$data;
+                    if(file_exists($path) && (filesize($path)<100000)){
+                        return true;
+                    }
+                    return 'ファイルサイズが大きすぎます。';
+                }
+            ]);
+        
+        $validator
             ->boolean('finished')
             ->requirePresence('finished', 'create')
             ->notEmptyString('finished');

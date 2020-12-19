@@ -94,37 +94,36 @@ class AuctionController extends AuctionBaseController
             try{
                 if(is_uploaded_file($upload_file['tmp_name']) && move_uploaded_file($upload_file['tmp_name'],$filePath)){
                     // 成功時
-                    move_uploaded_file($upload_file['tmp_name'],$filePath);
-                    // biditemにフォームの送信内容を反映
-                    $data = [
-                        'user_id' => $this->request->getData('user_id'),
-                        'name' => $this->request->getData('name'),
-                        'detail' => $this->request->getData('detail'),
-                        'image' => date("YmdHis").$upload_file['name'],
-                        'finished' => $this->request->getData('finished'),
-                        'endtime' => $this->request->getData('endtime'),
-                    ];
-                    $biditem = $this->Biditems->newEntity($data); 
-                    // biditemに保存する
-                    if($this->Biditems->save($biditem)){
-                        $connection->commit();
-                        // 成功時のメッセージ
-                        $this->Flash->success(__('保存しました。'));
-                        // トップページ（index）に移動
-                        return $this->redirect(['action'=>'index']);
-                    }else{
-                        $connection->rollback();
-                        // 画像の削除
-                        unlink($filePath);
-                        // 失敗時のメッセージ
-                        $this->Flash->error(__('保存に失敗しました。もう一度入力してください。'));    
-                    }
                 } else {
                     // 失敗時
                     throw new \Exception('失敗しました。');
                 }
+                // biditemにフォームの送信内容を反映
+                $data = [
+                    'user_id' => $this->request->getData('user_id'),
+                    'name' => $this->request->getData('name'),
+                    'detail' => $this->request->getData('detail'),
+                    'image' => date("YmdHis").$upload_file['name'],
+                    'finished' => $this->request->getData('finished'),
+                    'endtime' => $this->request->getData('endtime'),
+                ];
+                $biditem = $this->Biditems->newEntity($data); 
+                // biditemに保存する
+                if($this->Biditems->save($biditem)){
+                    $connection->commit();
+                    // 成功時のメッセージ
+                    $this->Flash->success(__('保存しました。'));
+                    // トップページ（index）に移動
+                    return $this->redirect(['action'=>'index']);
+                }else{
+                    // 失敗時のメッセージ
+                    throw new \Exception('保存に失敗しました。もう一度入力してください。');
+                }
             }catch(Exception $e){
-                echo 'エラー：'.$e->getMessage().PHP_EOL;
+                $this->Flash->error($e->getMessage());
+                $connection->rollback();
+                // 画像の削除
+                unlink($filePath);
             }
         }
         // 値を保管

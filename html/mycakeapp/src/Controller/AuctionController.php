@@ -87,7 +87,7 @@ class AuctionController extends AuctionBaseController
         if($this->request->isPost()){
             // 画像ファイル名称の先頭に時間をつけて/webroot/imgに移動させる
             $upload_file = $this->request->getData('image');
-            $filePath = '../webroot/img/'.date("YmdHis").$upload_file['name'];
+            $filePath = WWW_ROOT.'img/'.date("YmdHis").$upload_file['name'];
             try{
                 if(is_uploaded_file($upload_file['tmp_name'])){
                     move_uploaded_file($upload_file['tmp_name'],$filePath);                    
